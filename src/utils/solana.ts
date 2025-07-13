@@ -1,11 +1,13 @@
 import { Connection, PublicKey, SystemProgram, LAMPORTS_PER_SOL, Transaction, TransactionInstruction } from '@solana/web3.js';
 import { Program, AnchorProvider, web3, BN, Idl } from '@project-serum/anchor';
 import { WalletContextState } from '@solana/wallet-adapter-react';
-import {
-  createMintToCollectionV1Instruction,
-  PROGRAM_ID as BUBBLEGUM_PROGRAM_ID,
-  ConcurrentMerkleTreeAccount,
-} from '@metaplex-foundation/mpl-bubblegum';
+
+// Commented out compressed NFT imports - switching to Underdog Protocol
+// import {
+//   createMintToCollectionV1Instruction,
+//   PROGRAM_ID as BUBBLEGUM_PROGRAM_ID,
+//   ConcurrentMerkleTreeAccount,
+// } from '@metaplex-foundation/mpl-bubblegum';
 
 // Read-only wallet for public data fetching
 class ReadOnlyWallet {
@@ -29,16 +31,16 @@ export const PROGRAM_ID = new PublicKey("btrieZ5vghm8p5CFQvFAZvpEp13kjiTxWxd4dTR
 export const RAFFLE_PDA = new PublicKey("96w4cBXMNWjQQXabu78AGYpqYMTxS7BtPSspKMxeQTda");
 export const PROJECT_WALLET = new PublicKey("4WzpcDfBfY8sCvQdSoptmucfQ1uv1QndoP6zgaq3qZTb");
 export const DEV_WALLET = new PublicKey("4WzpcDfBfY8sCvQdSoptmucfQ1uv1QndoP6zgaq3qZTb");
-
-// Compressed NFT Configuration
-export const MERKLE_TREE = new PublicKey("7xKY2rZsqzZjTZqrFDFKHQYrr3nCkDrBLj5hJKqwRGmQ");
-export const COLLECTION_MINT = new PublicKey("Co11ectionMintPubkeyXXXXXXXXXXXXXXXXXXXXXXX");
-export const COLLECTION_MASTER_EDITION = new PublicKey("Co11ectionMasterEditionXXXXXXXXXXXXXXXXXXXX");
-export const TOKEN_METADATA_PROGRAM_ID = new PublicKey("metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s");
-
-// SPL Account Compression constants (avoiding package import issues)
-export const SPL_ACCOUNT_COMPRESSION_PROGRAM_ID = new PublicKey('cmtDvXumGCrqC1Age74AVPhSRVXJMd8PJS91L8KbNCK');
-export const SPL_NOOP_PROGRAM_ID = new PublicKey('noopb9bkMVfRPU8AsbpTUg8AQkHtKwMYZiFUjNRtMmV');
+// Commented out compressed NFT creation - switching to Underdog Protocol
+// // Compressed NFT Configuration
+// export const MERKLE_TREE = new PublicKey("7xKY2rZsqzZjTZqrFDFKHQYrr3nCkDrBLj5hJKqwRGmQ");
+// export const COLLECTION_MINT = new PublicKey("9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM");
+// export const COLLECTION_MASTER_EDITION = new PublicKey("J1S9H3QjnRtBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM");
+// export const TOKEN_METADATA_PROGRAM_ID = new PublicKey("metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s");
+// 
+// // SPL Account Compression constants (avoiding package import issues)
+// export const SPL_ACCOUNT_COMPRESSION_PROGRAM_ID = new PublicKey('cmtDvXumGCrqC1Age74AVPhSRVXJMd8PJS91L8KbNCK');
+// export const SPL_NOOP_PROGRAM_ID = new PublicKey('noopb9bkMVfRPU8AQkHtKwMYZiFUjNRtMmV');
 
 export const DEV_MINT_AMOUNT = 6250;
 export const MIN_MINT_AMOUNT = 2;
@@ -48,7 +50,7 @@ export const EARLY_BIRD_PRICE = 0.005; // SOL
 export const REGULAR_PRICE = 0.01; // SOL
 
 // Live metadata API
-export const METADATA_BASE_URL = "https://choppedonsol.netlify.app/.netlify/functions/metadata";
+// export const METADATA_BASE_URL = "https://choppedonsol.netlify.app/.netlify/functions/metadata";
 
 // Program IDL (simplified for demo - you'd get this from your Anchor build)
 const IDL: Idl = {
@@ -115,8 +117,10 @@ export const getProgram = (connection: Connection, wallet: WalletContextState) =
   return new Program(IDL, PROGRAM_ID, provider);
 };
 
-// TODO: Re-implement createMerkleTree function once package issues are resolved
-// For now, we'll focus on basic minting functionality
+// Get reliable Solana RPC connection
+export function getConnection(): Connection {
+  return new Connection('https://api.mainnet-beta.solana.com', 'confirmed');
+}
 
 // Initialize raffle (dev only)
 export async function initializeRaffle(connection: Connection, wallet: WalletContextState) {
@@ -192,144 +196,9 @@ export async function devMint(connection: Connection, wallet: WalletContextState
 }
 
 // Create real compressed NFT using Bubblegum program
-export async function createCompressedNFT(
-  connection: Connection,
-  wallet: WalletContextState,
-  ticketNumber: number
-): Promise<{ success: boolean; signature?: string; error?: string }> {
-  if (!wallet.publicKey || !wallet.signTransaction) {
-    return { success: false, error: "Wallet not connected" };
-  }
+// All compressed NFT creation code removed - switching to Underdog Protocol
 
-  try {
-    // Verify Merkle tree exists
-    const treeAccount = await getMerkleTreeAccount(connection);
-    if (!treeAccount) {
-      return { success: false, error: "Merkle tree not found. Please create tree first." };
-    }
-
-    // Derive collection metadata PDA dynamically
-    const [collectionMetadata] = PublicKey.findProgramAddressSync(
-      [
-        Buffer.from("metadata"),
-        TOKEN_METADATA_PROGRAM_ID.toBuffer(),
-        COLLECTION_MINT.toBuffer(),
-      ],
-      TOKEN_METADATA_PROGRAM_ID
-    );
-
-    // Get tree config PDA
-    const treeConfigPDA = PublicKey.findProgramAddressSync(
-      [MERKLE_TREE.toBuffer()],
-      BUBBLEGUM_PROGRAM_ID
-    )[0];
-
-    // Get collection authority record PDA
-    const [collectionAuthorityRecordPDA] = PublicKey.findProgramAddressSync(
-      [
-        Buffer.from("metadata"),
-        new PublicKey("metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s").toBuffer(), // Token Metadata Program ID
-        COLLECTION_MINT.toBuffer(),
-        Buffer.from("collection_authority"),
-        PROJECT_WALLET.toBuffer(),
-      ],
-      TOKEN_METADATA_PROGRAM_ID
-    );
-
-    // Get bubblegum signer PDA
-    const [bubblegumSigner] = PublicKey.findProgramAddressSync(
-      [Buffer.from("collection_cpi")],
-      BUBBLEGUM_PROGRAM_ID
-    );
-
-    // Generate metadata for this ticket
-    const metadata = {
-      name: `CHOP #${ticketNumber}`,
-      symbol: "CHOP",
-      uri: `${METADATA_BASE_URL}?id=${ticketNumber}`,
-      sellerFeeBasisPoints: 0,
-      collection: { key: COLLECTION_MINT, verified: false },
-    };
-
-    // Create the compressed NFT mint instruction
-    const mintIx = createMintToCollectionV1Instruction(
-      {
-        treeConfig: treeConfigPDA,
-        leafOwner: wallet.publicKey,
-        leafDelegate: wallet.publicKey,
-        merkleTree: MERKLE_TREE,
-        payer: wallet.publicKey,
-        treeCreator: PROJECT_WALLET,
-        collectionAuthority: PROJECT_WALLET,
-        collectionAuthorityRecordPda: collectionAuthorityRecordPDA,
-        collectionMint: COLLECTION_MINT,
-        collectionMetadata: collectionMetadata,
-        editionAccount: COLLECTION_MASTER_EDITION,
-        bubblegumSigner: bubblegumSigner,
-        logWrapper: SPL_NOOP_PROGRAM_ID,
-        compressionProgram: SPL_ACCOUNT_COMPRESSION_PROGRAM_ID,
-        tokenMetadataProgram: TOKEN_METADATA_PROGRAM_ID,
-        bubblegumProgram: BUBBLEGUM_PROGRAM_ID,
-        systemProgram: SystemProgram.programId,
-      },
-      {
-        metadataArgs: {
-          name: metadata.name,
-          symbol: metadata.symbol,
-          uri: metadata.uri,
-          creators: [
-            {
-              address: PROJECT_WALLET,
-              verified: false,
-              share: 100,
-            },
-          ],
-          editionNonce: null,
-          uses: null,
-          collection: {
-            verified: metadata.collection.verified,
-            key: metadata.collection.key,
-          },
-          primarySaleHappened: false,
-          sellerFeeBasisPoints: metadata.sellerFeeBasisPoints,
-          isMutable: true,
-          tokenProgramVersion: 0, // Original token program
-          tokenStandard: null,
-        },
-      }
-    );
-
-    // Create and send transaction
-    const transaction = new Transaction().add(mintIx);
-    const { blockhash } = await connection.getLatestBlockhash('confirmed');
-    transaction.recentBlockhash = blockhash;
-    transaction.feePayer = wallet.publicKey;
-
-    const signedTransaction = await wallet.signTransaction(transaction);
-    const signature = await connection.sendRawTransaction(signedTransaction.serialize());
-
-    // Confirm transaction with timeout
-    const confirmation = await connection.confirmTransaction({
-      signature,
-      blockhash,
-      lastValidBlockHeight: (await connection.getLatestBlockhash()).lastValidBlockHeight
-    }, 'confirmed');
-
-    if (confirmation.value.err) {
-      throw new Error(`Transaction failed: ${confirmation.value.err}`);
-    }
-
-    return { success: true, signature };
-  } catch (error) {
-    console.error(`Failed to create compressed NFT #${ticketNumber}:`, error);
-    return { 
-      success: false, 
-      error: error instanceof Error ? error.message : 'Unknown error'
-    };
-  }
-}
-
-// Mint tickets with compressed NFTs
+// Mint tickets - simplified for Underdog Protocol integration
 export async function mintTickets(
   connection: Connection, 
   wallet: WalletContextState, 
@@ -366,57 +235,21 @@ export async function mintTickets(
     const startingNumber = currentTotal - amount + 1;
     
     // Step 3: Create compressed NFTs
-    onProgress?.("Creating compressed NFTs...", 2, amount + 2);
+    onProgress?.("Preparing NFT data...", 2, amount + 2);
     
-    // Temporary: Skip compressed NFT creation since switching to Underdog
-    /*
-    const nftResults = [];
-    let successCount = 0;
-    let failCount = 0;
-
-    for (let i = 0; i < amount; i++) {
-      const ticketNumber = startingNumber + i;
-      const stepNumber = i + 3;
-      
-      onProgress?.(`Creating compressed NFT #${ticketNumber}...`, stepNumber, amount + 2);
-      
-      // Create real compressed NFT using Bubblegum
-      const result = await createCompressedNFT(connection, wallet, ticketNumber);
-      
-      if (result.success) {
-        successCount++;
-        nftResults.push({
-          ticketNumber,
-          signature: result.signature,
-          name: `CHOP #${ticketNumber}`,
-          type: 'compressed',
-        });
-      } else {
-        failCount++;
-        nftResults.push({
-          ticketNumber,
-          signature: null,
-          name: `CHOP #${ticketNumber}`,
-          type: 'compressed',
-          error: result.error
-        });
-      }
-    }
-    */
-    
-    // Placeholder until Underdog integration
+    // Placeholder data until Underdog Protocol integration
     const nftResults = [];
     for (let i = 0; i < amount; i++) {
       const ticketNumber = startingNumber + i;
       nftResults.push({
         ticketNumber,
-        signature: 'placeholder',
+        signature: null,
         name: `CHOP #${ticketNumber}`,
-        type: 'placeholder',
+        type: 'underdog_pending',
       });
     }
     
-    onProgress?.("Compressed NFT mint complete!", amount + 2, amount + 2);
+    onProgress?.("Raffle ticket purchase complete!", amount + 2, amount + 2);
     
     return {
       raffleTransaction: tx,
@@ -425,8 +258,8 @@ export async function mintTickets(
       totalMinted: amount,
       successfulNfts: amount,
       failedNfts: 0,
-      type: 'placeholder',
-      estimatedCost: 0, // Will be updated with Underdog integration
+      type: 'underdog_pending',
+      estimatedCost: 0, // Underdog Protocol will handle NFT creation
     };
     
   } catch (error) {
@@ -439,7 +272,6 @@ export async function mintTickets(
     throw new Error(`Mint failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
 }
-
 
 // Get raffle status
 export async function getRaffleStatus(connection: Connection) {
@@ -479,9 +311,9 @@ export async function getRaffleStatus(connection: Connection) {
 // Get user holdings
 export async function getUserHoldings(walletAddress: PublicKey) {
   try {
-    // This would typically involve fetching compressed NFTs from the wallet
-    // For now, return mock data - you'd implement actual compressed NFT fetching
-    // using Digital Asset Standard (DAS) API or similar
+    // TODO: Implement Underdog Protocol NFT fetching
+    // For now, return mock data until Underdog integration
+    // Underdog provides APIs to fetch NFTs by wallet address
     return Math.floor(Math.random() * 50);
   } catch (error) {
     console.error("Get user holdings error:", error);
@@ -494,7 +326,7 @@ export const calculatePrice = (amount: number, totalMinted: number): number => {
   const pricePerNFT = totalMinted < EARLY_BIRD_THRESHOLD ? EARLY_BIRD_PRICE : REGULAR_PRICE;
   return amount * pricePerNFT;
 }
-// Add after line 523 (after calculatePrice function)
+
 
 // Utility function to check if error is RPC related
 export function isRpcError(error: any): boolean {
@@ -528,25 +360,5 @@ export async function withRetry<T>(
   throw lastError;
 }
 
-// Get Merkle tree account helper
-export async function getMerkleTreeAccount(connection: Connection): Promise<ConcurrentMerkleTreeAccount | null> {
-  try {
-    const treeAccount = await ConcurrentMerkleTreeAccount.fromAccountAddress(
-      connection,
-      MERKLE_TREE
-    );
-    return treeAccount;
-  } catch (error) {
-    console.error('Failed to fetch Merkle tree account:', error);
-    return null;
-  }
-}
-
-// Get reliable Solana RPC endpoint
-export function getConnection(): Connection {
-  return new Connection('https://api.mainnet-beta.solana.com', 'confirmed');
-}
-
-// Commented out compressed NFT code - switching to Underdog
+// Commented out all compressed NFT code - switching to Underdog Protocol
 /*
-*/

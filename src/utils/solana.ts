@@ -25,7 +25,7 @@ class ReadOnlyWallet {
 }
 
 // Mainnet Program Details
-export const PROGRAM_ID = new PublicKey("11111111111111111111111111111112");
+export const PROGRAM_ID = new PublicKey("btrieZ5vghm8p5CFQvFAZvpEp13kjiTxWxd4dTRWL1V");
 export const RAFFLE_PDA = new PublicKey("96w4cBXMNWjQQXabu78AGYpqYMTxS7BtPSspKMxeQTda");
 export const PROJECT_WALLET = new PublicKey("4WzpcDfBfY8sCvQdSoptmucfQ1uv1QndoP6zgaq3qZTb");
 export const DEV_WALLET = new PublicKey("4WzpcDfBfY8sCvQdSoptmucfQ1uv1QndoP6zgaq3qZTb");
@@ -543,8 +543,8 @@ export async function getMerkleTreeAccount(connection: Connection): Promise<Conc
 }
 
 // Get reliable Solana RPC endpoint
-export function getSolanaRpcEndpoint(): string {
-  return 'https://api.mainnet-beta.solana.com';
+export function getConnection(): Connection {
+  return new Connection('https://api.mainnet-beta.solana.com', 'confirmed');
 }
 
 // Commented out compressed NFT code - switching to Underdog

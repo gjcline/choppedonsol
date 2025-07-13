@@ -4,7 +4,6 @@ import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { PhantomWalletAdapter } from '@solana/wallet-adapter-phantom';
 import { clusterApiUrl } from '@solana/web3.js';
 import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
-import { getSolanaRpcEndpoint } from '../utils/solana';
 
 // Import wallet adapter CSS
 import '@solana/wallet-adapter-react-ui/styles.css';
@@ -15,7 +14,7 @@ interface Props {
 
 export const WalletConnectionProvider: FC<Props> = ({ children }) => {
   const network = WalletAdapterNetwork.Mainnet;
-  const endpoint = useMemo(() => getSolanaRpcEndpoint(), []);
+  const endpoint = useMemo(() => 'https://api.mainnet-beta.solana.com', []);
   
   const wallets = useMemo(
     () => [

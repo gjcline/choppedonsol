@@ -16,7 +16,6 @@ export default defineConfig({
   },
   optimizeDeps: {
     exclude: ['lucide-react'],
-    include: ['@solana/spl-account-compression'],
     esbuildOptions: {
       mainFields: ['exports', 'browser', 'module', 'main']
     }

@@ -235,13 +235,13 @@ export async function mintTickets(
     const startingNumber = currentTotal - amount + 1;
     
     // Step 3: Create compressed NFTs
-    onProgress?.("Preparing NFT data...", 2, amount + 2);
+    onProgress?.("Creating NFTs via Underdog Protocol...", 2, amount + 3);
     
     const nftResults = [];
     let successfulNfts = 0;
     let failedNfts = 0;
     
-    for (let i = 0; i < amount; i++) {
+    // Create NFTs via Underdog Protocol
       const ticketNumber = startingNumber + i;
       
       try {
@@ -288,7 +288,7 @@ export async function mintTickets(
       startingNumber,
       totalMinted: amount,
       successfulNfts,
-      failedNfts,
+      failedNfts: failCount,
       type: 'underdog_complete',
       estimatedCost: 0, // Underdog Protocol handles NFT creation
     };
@@ -405,18 +405,42 @@ export async function mintNFTWithUnderdog(
 ) {
   try {
     const response = await fetch(`${UNDERDOG_API_BASE}/projects/${UNDERDOG_PROJECT_ID}/nfts`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        name: `CHOP #${ticketNumber}`,
-        symbol: "CHOP",
-        description: `Chopped On Sol raffle ticket #${ticketNumber}`,
-        image: `https://choppedonsol.netlify.app/.netlify/functions/metadata/${ticketNumber}/image`,
+      const stepNumber = i + 3;
+      
+      onProgress?.(`Minting NFT #${ticketNumber}...`, stepNumber, amount + 3);
+      
+      try {
+        const result = await mintTicketNFT(wallet.publicKey!.toString(), ticketNumber);
+        
+        nftResults.push({
+          ticketNumber,
+          signature: result.transactionId || 'underdog_success',
+          name: `CHOP #${ticketNumber}`,
+          type: 'underdog',
+          underdogId: result.nftId,
+          mintAddress: result.mintAddress,
+        });
+        successCount++;
+      } catch (error) {
+        console.error(`Failed to mint NFT #${ticketNumber}:`, error);
+        
+        nftResults.push({
+          ticketNumber,
+          signature: null,
+          name: `CHOP #${ticketNumber}`,
+          type: 'underdog_failed',
+          error: error instanceof Error ? error.message : 'Unknown error'
+        });
+        failCount++;
+      }
+      
+      // Small delay between mints to avoid rate limiting
+      if (i < amount - 1) {
+        await new Promise(resolve => setTimeout(resolve, 500));
+      }
         external_url: "https://choppedonsol.netlify.app",
         attributes: attributes || [
-          { trait_type: "Ticket Number", value: ticketNumber },
+    onProgress?.("NFT minting complete!", amount + 3, amount + 3);
           { trait_type: "Collection", value: "CHOP Raffle" }
         ],
         receiverAddress: walletAddress

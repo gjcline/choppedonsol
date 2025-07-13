@@ -17,10 +17,10 @@ export default defineConfig({
     exclude: ['lucide-react'],
     include: ['@solana/spl-account-compression'],
     esbuildOptions: {
-      mainFields: ['browser']
+      mainFields: ['exports', 'browser', 'module', 'main']
     }
   },
   resolve: {
-    mainFields: ['browser', 'module', 'main']
+    mainFields: ['exports', 'browser', 'module', 'main']
   },
 });

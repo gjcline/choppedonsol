@@ -328,7 +328,6 @@ export async function createCompressedNFT(
     };
   }
 }
-*/
 
 // Mint tickets with compressed NFTs
 export async function mintTickets(

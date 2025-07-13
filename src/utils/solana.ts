@@ -237,16 +237,47 @@ export async function mintTickets(
     // Step 3: Create compressed NFTs
     onProgress?.("Preparing NFT data...", 2, amount + 2);
     
-    // Placeholder data until Underdog Protocol integration
     const nftResults = [];
+    let successfulNfts = 0;
+    let failedNfts = 0;
+    
     for (let i = 0; i < amount; i++) {
       const ticketNumber = startingNumber + i;
-      nftResults.push({
-        ticketNumber,
-        signature: null,
-        name: `CHOP #${ticketNumber}`,
-        type: 'underdog_pending',
-      });
+      
+      try {
+        const nftResult = await mintNFTWithUnderdog(
+          wallet.publicKey!.toString(),
+          ticketNumber
+        );
+        
+        nftResults.push({
+          ticketNumber,
+          signature: nftResult.transactionId,
+          name: `CHOP #${ticketNumber}`,
+          type: 'underdog_success',
+          underdogId: nftResult.nftId,
+          mintAddress: nftResult.mintAddress,
+        });
+        
+        successfulNfts++;
+      } catch (error) {
+        console.error(`Failed to mint NFT #${ticketNumber}:`, error);
+        
+        nftResults.push({
+          ticketNumber,
+          signature: null,
+          name: `CHOP #${ticketNumber}`,
+          type: 'underdog_failed',
+          error: error instanceof Error ? error.message : 'Unknown error',
+        });
+        
+        failedNfts++;
+      }
+      
+      // Small delay between mints to avoid rate limiting
+      if (i < amount - 1) {
+        await new Promise(resolve => setTimeout(resolve, 500));
+      }
     }
     
     onProgress?.("Raffle ticket purchase complete!", amount + 2, amount + 2);
@@ -256,10 +287,10 @@ export async function mintTickets(
       nfts: nftResults,
       startingNumber,
       totalMinted: amount,
-      successfulNfts: amount,
-      failedNfts: 0,
-      type: 'underdog_pending',
-      estimatedCost: 0, // Underdog Protocol will handle NFT creation
+      successfulNfts,
+      failedNfts,
+      type: 'underdog_complete',
+      estimatedCost: 0, // Underdog Protocol handles NFT creation
     };
     
   } catch (error) {
@@ -361,4 +392,45 @@ export async function withRetry<T>(
 }
 
 // Commented out all compressed NFT code - switching to Underdog Protocol
-/*
+
+// Underdog Protocol Configuration
+export const UNDERDOG_PROJECT_ID = "3Jsk5s";
+export const UNDERDOG_API_BASE = "https://mainnet.underdogprotocol.com/v2";
+
+// Mint NFT via Underdog Protocol
+export async function mintNFTWithUnderdog(
+  walletAddress: string,
+  ticketNumber: number,
+  attributes?: { trait_type: string; value: string | number }[]
+) {
+  try {
+    const response = await fetch(`${UNDERDOG_API_BASE}/projects/${UNDERDOG_PROJECT_ID}/nfts`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: `CHOP #${ticketNumber}`,
+        symbol: "CHOP",
+        description: `Chopped On Sol raffle ticket #${ticketNumber}`,
+        image: `https://choppedonsol.netlify.app/.netlify/functions/metadata/${ticketNumber}/image`,
+        external_url: "https://choppedonsol.netlify.app",
+        attributes: attributes || [
+          { trait_type: "Ticket Number", value: ticketNumber },
+          { trait_type: "Collection", value: "CHOP Raffle" }
+        ],
+        receiverAddress: walletAddress
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`Underdog API error: ${response.status}`);
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error("Underdog mint error:", error);
+    throw error;
+  }
+}

@@ -33,7 +33,7 @@ export const DEV_WALLET = new PublicKey("4WzpcDfBfY8sCvQdSoptmucfQ1uv1QndoP6zgaq
 // Compressed NFT Configuration
 export const MERKLE_TREE = new PublicKey("7xKY2rZsqzZjTZqrFDFKHQYrr3nCkDrBLj5hJKqwRGmQ");
 export const COLLECTION_MINT = new PublicKey("chop1Kv8CCk3rF7HqYUMuzJZJvVzZr8y5vV4qEHc3Y2");
-export const COLLECTION_METADATA = new PublicKey("chop2SNGDHgdJWGQ6rF7HqYUMuzJZJvVzZr8y5vV4qE1");
+export const COLLECTION_METADATA = new PublicKey("metaXKGP6qLtg9fEpVWxn4k3o6GJ8k1ZE7L8KqG1ZrE");
 export const COLLECTION_MASTER_EDITION = new PublicKey("chop3ZccVY8CCk3rF7HqYUMuzJZJvVzZr8y5vV4qE3");
 export const TOKEN_METADATA_PROGRAM_ID = new PublicKey("metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s");
 

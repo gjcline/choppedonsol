@@ -6,11 +6,6 @@ import {
   PROGRAM_ID as BUBBLEGUM_PROGRAM_ID,
   ConcurrentMerkleTreeAccount,
 } from '@metaplex-foundation/mpl-bubblegum';
-import {
-  SPL_ACCOUNT_COMPRESSION_PROGRAM_ID,
-  SPL_NOOP_PROGRAM_ID,
-  createAllocTreeInstruction,
-} from '@solana/spl-account-compression';
 
 // Read-only wallet for public data fetching
 class ReadOnlyWallet {
@@ -41,6 +36,10 @@ export const COLLECTION_MINT = new PublicKey("chop1Kv8CCk3rF7HqYUMuzJZJvVzZr8y5v
 export const COLLECTION_METADATA = new PublicKey("chop2SNGDHgdJWGQ6rF7HqYUMuzJZJvVzZr8y5vV4qE1");
 export const COLLECTION_MASTER_EDITION = new PublicKey("chop3ZccVY8CCk3rF7HqYUMuzJZJvVzZr8y5vV4qE3");
 export const TOKEN_METADATA_PROGRAM_ID = new PublicKey("metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s");
+
+// SPL Account Compression constants (avoiding package import issues)
+export const SPL_ACCOUNT_COMPRESSION_PROGRAM_ID = new PublicKey('cmtDvXumGCrqC1Age74AVPhSRVXJMd8PJS91L8KbNCK');
+export const SPL_NOOP_PROGRAM_ID = new PublicKey('noopb9bkMVfRPU8AsbpTUg8AQkHtKwMYZiFUjNRtMmV');
 
 export const DEV_MINT_AMOUNT = 6250;
 export const MIN_MINT_AMOUNT = 2;
@@ -117,53 +116,8 @@ export const getProgram = (connection: Connection, wallet: WalletContextState) =
   return new Program(IDL, PROGRAM_ID, provider);
 };
 
-// Create Merkle tree for compressed NFTs (one-time setup)
-export const createMerkleTree = async (
-  connection: Connection, 
-  wallet: WalletContextState,
-  maxDepth: number = 20, // Supports up to 2^20 = ~1M NFTs
-  maxBufferSize: number = 64 // Concurrent transactions
-): Promise<PublicKey> => {
-  if (!wallet.publicKey || !wallet.signTransaction) {
-    throw new Error("Wallet not connected");
-  }
-
-  try {
-    // Generate a new keypair for the tree
-    const treeKeypair = web3.Keypair.generate();
-    
-    // Create the tree allocation instruction
-    const allocTreeIx = await createAllocTreeInstruction(
-      {
-        merkleTree: treeKeypair.publicKey,
-        treeCreator: wallet.publicKey,
-        payer: wallet.publicKey,
-        logWrapper: SPL_NOOP_PROGRAM_ID,
-        compressionProgram: SPL_ACCOUNT_COMPRESSION_PROGRAM_ID,
-        systemProgram: SystemProgram.programId,
-      },
-      {
-        maxDepth,
-        maxBufferSize,
-      }
-    );
-
-    const transaction = new Transaction().add(allocTreeIx);
-    transaction.feePayer = wallet.publicKey;
-    transaction.recentBlockhash = (await connection.getLatestBlockhash()).blockhash;
-    transaction.partialSign(treeKeypair);
-
-    const signedTransaction = await wallet.signTransaction(transaction);
-    const signature = await connection.sendRawTransaction(signedTransaction.serialize());
-    await connection.confirmTransaction(signature, 'confirmed');
-
-    console.log('Merkle tree created:', treeKeypair.publicKey.toString());
-    return treeKeypair.publicKey;
-  } catch (error) {
-    console.error("Error creating Merkle tree:", error);
-    throw new Error("Failed to create Merkle tree");
-  }
-}
+// TODO: Re-implement createMerkleTree function once package issues are resolved
+// For now, we'll focus on basic minting functionality
 
 // Initialize raffle (dev only)
 export async function initializeRaffle(connection: Connection, wallet: WalletContextState) {

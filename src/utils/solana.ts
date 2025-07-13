@@ -33,7 +33,6 @@ export const DEV_WALLET = new PublicKey("4WzpcDfBfY8sCvQdSoptmucfQ1uv1QndoP6zgaq
 // Compressed NFT Configuration
 export const MERKLE_TREE = new PublicKey("7xKY2rZsqzZjTZqrFDFKHQYrr3nCkDrBLj5hJKqwRGmQ");
 export const COLLECTION_MINT = new PublicKey("chop1Kv8CCk3rF7HqYUMuzJZJvVzZr8y5vV4qEHc3Y2");
-export const COLLECTION_METADATA = new PublicKey("metaXKGP6qLtg9fEpVWxn4k3o6GJ8k1ZE7L8KqG1ZrE");
 export const COLLECTION_MASTER_EDITION = new PublicKey("chop3ZccVY8CCk3rF7HqYUMuzJZJvVzZr8y5vV4qE3");
 export const TOKEN_METADATA_PROGRAM_ID = new PublicKey("metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s");
 
@@ -209,6 +208,16 @@ export async function createCompressedNFT(
       return { success: false, error: "Merkle tree not found. Please create tree first." };
     }
 
+    // Derive collection metadata PDA dynamically
+    const [collectionMetadata] = PublicKey.findProgramAddressSync(
+      [
+        Buffer.from("metadata"),
+        TOKEN_METADATA_PROGRAM_ID.toBuffer(),
+        COLLECTION_MINT.toBuffer(),
+      ],
+      TOKEN_METADATA_PROGRAM_ID
+    );
+
     // Get tree config PDA
     const treeConfigPDA = PublicKey.findProgramAddressSync(
       [MERKLE_TREE.toBuffer()],
@@ -254,7 +263,7 @@ export async function createCompressedNFT(
         collectionAuthority: PROJECT_WALLET,
         collectionAuthorityRecordPda: collectionAuthorityRecordPDA,
         collectionMint: COLLECTION_MINT,
-        collectionMetadata: COLLECTION_METADATA,
+        collectionMetadata: collectionMetadata,
         editionAccount: COLLECTION_MASTER_EDITION,
         bubblegumSigner: bubblegumSigner,
         logWrapper: SPL_NOOP_PROGRAM_ID,

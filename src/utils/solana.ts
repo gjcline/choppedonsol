@@ -527,23 +527,7 @@ export async function getMerkleTreeAccount(connection: Connection): Promise<Conc
   }
 }
 
-// Create connection with fallback RPC endpoints
-export function getConnection(): Connection {
-  const endpoints = [
-    'https://api.mainnet-beta.solana.com',
-    'https://solana-mainnet.g.alchemy.com/v2/demo',
-    'https://api.mainnet-beta.solana.com',
-  ];
-  
-  // Try endpoints until one works
-  for (const endpoint of endpoints) {
-    try {
-      return new Connection(endpoint, 'confirmed');
-    } catch (error) {
-      console.warn(`Failed to connect to ${endpoint}, trying next...`);
-    }
-  }
-  
-  // Default to first endpoint
-  return new Connection(endpoints[0], 'confirmed');
+// Get reliable Solana RPC endpoint
+export function getSolanaRpcEndpoint(): string {
+  return 'https://rpc.ankr.com/solana';
 }

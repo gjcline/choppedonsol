@@ -22,9 +22,6 @@ export default defineConfig({
     }
   },
   resolve: {
-    alias: {
-      '@solana/spl-account-compression': path.resolve(__dirname, 'node_modules/@solana/spl-account-compression/lib')
-    },
     mainFields: ['exports', 'browser', 'module', 'main']
   },
 });

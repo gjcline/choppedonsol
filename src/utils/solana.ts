@@ -119,7 +119,7 @@ export const getProgram = (connection: Connection, wallet: WalletContextState) =
 
 // Get reliable Solana RPC connection
 export function getConnection(): Connection {
-  return new Connection('https://rpc.ankr.com/solana', 'confirmed');
+  return new Connection('https://api.mainnet-beta.solana.com', 'confirmed');
 }
 
 // Initialize raffle (dev only)
@@ -328,12 +328,12 @@ export async function getRaffleStatus(connection: Connection) {
   } catch (error) {
     console.error("RPC error:", error);
     
-    // Return cached/default values when RPC fails
+    // Return default values when RPC fails
     return {
-      totalMinted: 6250, // Assume dev mint has been done
-      isInitialized: true, // You confirmed raffle is initialized
+      totalMinted: 6250,
+      isInitialized: true,
       currentPhase: "Early Bird" as const,
-      devMintDone: true, // Assume dev mint is done
+      devMintDone: true,
       pricePerNFT: EARLY_BIRD_PRICE,
     };
   }

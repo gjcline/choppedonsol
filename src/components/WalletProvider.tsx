@@ -14,7 +14,7 @@ interface Props {
 
 export const WalletConnectionProvider: FC<Props> = ({ children }) => {
   const network = WalletAdapterNetwork.Mainnet;
-  const endpoint = useMemo(() => 'https://api.mainnet-beta.solana.com', []);
+  const endpoint = useMemo(() => 'https://rpc.ankr.com/solana', []);
   
   const wallets = useMemo(
     () => [

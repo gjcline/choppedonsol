@@ -119,7 +119,7 @@ export const getProgram = (connection: Connection, wallet: WalletContextState) =
 
 // Get reliable Solana RPC connection
 export function getConnection(): Connection {
-  return new Connection('https://api.mainnet-beta.solana.com', 'confirmed');
+  return new Connection('https://rpc.ankr.com/solana', 'confirmed');
 }
 
 // Initialize raffle (dev only)

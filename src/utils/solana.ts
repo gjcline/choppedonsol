@@ -328,6 +328,7 @@ export async function createCompressedNFT(
     };
   }
 }
+*/
 
 // Mint tickets with compressed NFTs
 export async function mintTickets(
@@ -368,6 +369,8 @@ export async function mintTickets(
     // Step 3: Create compressed NFTs
     onProgress?.("Creating compressed NFTs...", 2, amount + 2);
     
+    // Temporary: Skip compressed NFT creation since switching to Underdog
+    /*
     const nftResults = [];
     let successCount = 0;
     let failCount = 0;
@@ -400,6 +403,19 @@ export async function mintTickets(
         });
       }
     }
+    */
+    
+    // Placeholder until Underdog integration
+    const nftResults = [];
+    for (let i = 0; i < amount; i++) {
+      const ticketNumber = startingNumber + i;
+      nftResults.push({
+        ticketNumber,
+        signature: 'placeholder',
+        name: `CHOP #${ticketNumber}`,
+        type: 'placeholder',
+      });
+    }
     
     onProgress?.("Compressed NFT mint complete!", amount + 2, amount + 2);
     
@@ -408,10 +424,10 @@ export async function mintTickets(
       nfts: nftResults,
       startingNumber,
       totalMinted: amount,
-      successfulNfts: successCount,
-      failedNfts: failCount,
-      type: 'compressed',
-      estimatedCost: amount * 0.00015, // Approximate cost for compressed NFTs
+      successfulNfts: amount,
+      failedNfts: 0,
+      type: 'placeholder',
+      estimatedCost: 0, // Will be updated with Underdog integration
     };
     
   } catch (error) {
@@ -529,5 +545,8 @@ export async function getMerkleTreeAccount(connection: Connection): Promise<Conc
 
 // Get reliable Solana RPC endpoint
 export function getSolanaRpcEndpoint(): string {
-  return 'https://rpc.ankr.com/solana';
+  return 'https://api.mainnet-beta.solana.com';
 }
+
+// Commented out compressed NFT code - switching to Underdog
+/*

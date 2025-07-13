@@ -20,4 +20,7 @@ export default defineConfig({
       mainFields: ['browser']
     }
   },
+  resolve: {
+    mainFields: ['browser', 'module', 'main']
+  },
 });

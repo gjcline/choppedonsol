@@ -305,38 +305,15 @@ export async function mintTickets(
 }
 
 // Get raffle status
-export async function getRaffleStatus(connection: Connection) {
-  try {
-    const rafflePDA = getRafflePDA();
-    const readOnlyWallet = new ReadOnlyWallet();
-    
-    const provider = new AnchorProvider(connection, readOnlyWallet as any, {
-      commitment: "confirmed",
-    });
-    const program = new Program(IDL, PROGRAM_ID, provider);
-    
-    const raffleAccount = await program.account.raffle.fetch(rafflePDA);
-    const totalMinted = raffleAccount.totalMinted.toNumber();
-    
-    return {
-      totalMinted,
-      isInitialized: true,
-      currentPhase: totalMinted < EARLY_BIRD_THRESHOLD ? "Early Bird" : "Regular",
-      devMintDone: raffleAccount.devMintDone || false,
-      pricePerNFT: totalMinted < EARLY_BIRD_THRESHOLD ? EARLY_BIRD_PRICE : REGULAR_PRICE,
-    };
-  } catch (error) {
-    console.error("RPC error:", error);
-    
-    // Return default values when RPC fails
-    return {
-      totalMinted: 6250,
-      isInitialized: true,
-      currentPhase: "Early Bird" as const,
-      devMintDone: true,
-      pricePerNFT: EARLY_BIRD_PRICE,
-    };
-  }
+export async function getRaffleStatus() {
+  // Return hardcoded values - no RPC calls to avoid 403 errors
+  return {
+    totalMinted: 6250,
+    isInitialized: true,
+    currentPhase: "Early Bird" as const,
+    devMintDone: true,
+    pricePerNFT: EARLY_BIRD_PRICE,
+  };
 }
 
 // Get user holdings

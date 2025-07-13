@@ -516,3 +516,71 @@ export const calculatePrice = (amount: number, totalMinted: number): number => {
   const pricePerNFT = totalMinted < EARLY_BIRD_THRESHOLD ? EARLY_BIRD_PRICE : REGULAR_PRICE;
   return amount * pricePerNFT;
 }
+// Add after line 523 (after calculatePrice function)
+
+// Utility function to check if error is RPC related
+export function isRpcError(error: any): boolean {
+  const errorMessage = error?.message?.toLowerCase() || '';
+  return errorMessage.includes('403') || 
+         errorMessage.includes('access forbidden') ||
+         errorMessage.includes('failed to get recent blockhash') ||
+         errorMessage.includes('network') ||
+         errorMessage.includes('connection');
+}
+
+// Retry utility for RPC calls
+export async function withRetry<T>(
+  fn: () => Promise<T>,
+  maxRetries: number = 3,
+  delay: number = 1000
+): Promise<T> {
+  let lastError: any;
+  
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      return await fn();
+    } catch (error) {
+      lastError = error;
+      if (i < maxRetries - 1) {
+        await new Promise(resolve => setTimeout(resolve, delay * Math.pow(2, i)));
+      }
+    }
+  }
+  
+  throw lastError;
+}
+
+// Get Merkle tree account helper
+export async function getMerkleTreeAccount(connection: Connection): Promise<ConcurrentMerkleTreeAccount | null> {
+  try {
+    const treeAccount = await ConcurrentMerkleTreeAccount.fromAccountAddress(
+      connection,
+      MERKLE_TREE
+    );
+    return treeAccount;
+  } catch (error) {
+    console.error('Failed to fetch Merkle tree account:', error);
+    return null;
+  }
+}
+
+// Create connection with fallback RPC endpoints
+export function getConnection(): Connection {
+  const endpoints = [
+    'https://api.mainnet-beta.solana.com',
+    'https://solana-mainnet.g.alchemy.com/v2/demo',
+    'https://api.mainnet-beta.solana.com',
+  ];
+  
+  // Try endpoints until one works
+  for (const endpoint of endpoints) {
+    try {
+      return new Connection(endpoint, 'confirmed');
+    } catch (error) {
+      console.warn(`Failed to connect to ${endpoint}, trying next...`);
+    }
+  }
+  
+  // Default to first endpoint
+  return new Connection(endpoints[0], 'confirmed');
+}

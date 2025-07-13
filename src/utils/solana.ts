@@ -25,7 +25,7 @@ class ReadOnlyWallet {
 }
 
 // Mainnet Program Details
-export const PROGRAM_ID = new PublicKey("btrieZ5vghm8p5CFQvFAZvpEp13kjiTxWxd4dTRWL1V");
+export const PROGRAM_ID = new PublicKey("11111111111111111111111111111112");
 export const RAFFLE_PDA = new PublicKey("96w4cBXMNWjQQXabu78AGYpqYMTxS7BtPSspKMxeQTda");
 export const PROJECT_WALLET = new PublicKey("4WzpcDfBfY8sCvQdSoptmucfQ1uv1QndoP6zgaq3qZTb");
 export const DEV_WALLET = new PublicKey("4WzpcDfBfY8sCvQdSoptmucfQ1uv1QndoP6zgaq3qZTb");

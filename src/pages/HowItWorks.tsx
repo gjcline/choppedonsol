@@ -26,7 +26,7 @@ export const HowItWorks: React.FC = () => {
         "Minimum 2 tickets per transaction", 
         "Early Bird Price: 0.005 SOL (first 100k)",
         "Standard Price: 0.01 SOL (remaining 150k)",
-        "10% chance of special edition artwork"
+        "2% chance of special edition artwork"
       ],
       icon: <Coins className="w-8 h-8" />
     },

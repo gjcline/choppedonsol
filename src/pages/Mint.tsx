@@ -11,12 +11,12 @@ export const Mint: React.FC = () => {
   const { raffleStatus } = useAppContext();
   const [quantity, setQuantity] = useState(1);
   
+  // Get Crossmint API key from environment
+  const clientApiKey = import.meta.env.VITE_CROSSMINT_CLIENT_API_KEY;
+  
   // Determine current price based on total minted
   const currentPrice = raffleStatus.totalMinted < EARLY_BIRD_THRESHOLD ? EARLY_BIRD_PRICE : REGULAR_PRICE;
   const totalPrice = (currentPrice * quantity).toFixed(3);
-  
-  // Crossmint API key (in production, this should be in environment variables)
-  const clientApiKey = "sk_staging_4zdMgzRc6CXNLKitD8fBLdJkkPGzK7M6YqjRnX8jnJvJttFQeTRjJNLmHNJBF3CvT8sLnNF2vGE7KiKA8Nt5kcYmHb7VNRGJBJQsKVvLvpYSCMNaGhVfZPYJMtPNfPGPFQjHQNBf";
 
   return (
     <div className="min-h-screen bg-black text-white font-inter overflow-x-hidden pt-16">

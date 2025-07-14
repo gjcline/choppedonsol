@@ -168,6 +168,19 @@ export const Home: React.FC = () => {
             </div>
           </div>
 
+          {/* How It Works Button */}
+          <div className="text-center mb-12">
+            <Link
+              to="/how-it-works"
+              className="inline-flex items-center space-x-2 px-8 py-4 bg-gradient-to-r from-purple-600/20 to-blue-600/20 border border-white/20 rounded-xl hover:border-white/40 transition-all duration-300 backdrop-blur-xl group"
+            >
+              <span className="text-lg font-orbitron font-medium text-white group-hover:text-purple-200 transition-colors duration-300">
+                HOW IT WORKS
+              </span>
+              <ChevronRight className="w-5 h-5 text-white group-hover:text-purple-200 transition-colors duration-300" />
+            </Link>
+          </div>
+
           {/* Countdown Timer */}
           <div className="mb-8">
             <div className="text-sm text-gray-400 mb-4 font-orbitron">

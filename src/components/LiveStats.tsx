@@ -18,7 +18,7 @@ export const LiveStats: React.FC = () => {
               <span className="text-sm text-gray-400">Total Minted</span>
             </div>
             <div className="text-2xl font-orbitron font-bold holographic-text">
-              {isLoading ? '...' : raffleStatus.totalMinted.toLocaleString()}
+              {isLoading ? '...' : '0'}
             </div>
             <div className="text-xs text-gray-500">/ {MAX_SUPPLY.toLocaleString()}</div>
             <div className="mt-2 w-full bg-gray-700 rounded-full h-2">

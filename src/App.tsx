@@ -33,13 +33,6 @@ function App() {
                   Built on Solana • Fair Launch • No Presale
                 </div>
               </div>
-              
-              <div className="flex items-center space-x-2 text-sm text-gray-400">
-                <span>Brought to you by</span>
-                <div className="glass-card px-3 py-1 rounded-full backdrop-blur-xl border border-white/20">
-                  <span className="font-medium text-white">Mile High Jewelers</span>
-                </div>
-              </div>
             </div>
           </footer>
         </div>

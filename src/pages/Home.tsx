@@ -19,8 +19,8 @@ import { useAppContext } from '../contexts/AppContext';
 export const Home: React.FC = () => {
   const { isDevWallet, raffleStatus } = useAppContext();
   
-  // Target date: July 12, 2025 at 1 PM PST
-  const targetDate = new Date('2025-07-12T13:00:00-08:00');
+  // Target date: July 15, 2025 at 9 PM EST
+  const targetDate = new Date('2025-07-15T21:00:00-05:00');
   
   const calculateTimeLeft = () => {
     const now = new Date();
@@ -128,9 +128,9 @@ export const Home: React.FC = () => {
           {/* Countdown Timer */}
           <div className="mb-8">
             <div className="text-sm text-gray-400 mb-4 font-orbitron">
-              {isLive ? 'MINT IS LIVE!' : 'PHASE 1 STARTS IN'}
+              {isLive ? 'MINT IS LIVE!' : 'MINT STARTS IN'}
             </div>
-            {!isLive && (
+            <div className="mb-4">
               <div className="flex justify-center space-x-4">
                 {Object.entries(timeLeft).map(([unit, value]) => (
                   <div key={unit} className="glass-card p-4 rounded-xl backdrop-blur-xl border border-white/20">
@@ -141,21 +141,24 @@ export const Home: React.FC = () => {
                   </div>
                 ))}
               </div>
-            )}
+            </div>
+            <div className="text-center text-gray-400 text-sm">
+              Tuesday, July 15th at 9:00 PM EST
+            </div>
           </div>
 
           {/* Mint Button */}
           <div className="mb-8">
-            <Link 
+            <div 
               to="/mint"
-              className="inline-block group relative px-12 py-4 rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 text-white font-orbitron font-bold text-xl transition-all duration-300 hover:from-purple-500 hover:to-blue-500 hover:scale-105"
+              className="inline-block group relative px-12 py-4 rounded-xl bg-gradient-to-r from-gray-600 to-gray-700 text-gray-300 font-orbitron font-bold text-xl transition-all duration-300 cursor-not-allowed opacity-60"
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-400/20 to-blue-400/20 rounded-xl blur-xl group-hover:blur-2xl transition-all duration-300"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-gray-400/10 to-gray-500/10 rounded-xl blur-xl transition-all duration-300"></div>
               <span className="relative flex items-center space-x-2">
-                <Zap className="w-6 h-6" />
-                <span>MINT CHOP TICKETS</span>
+                <Clock className="w-6 h-6" />
+                <span>MINT COMING SOON</span>
               </span>
-            </Link>
+            </div>
           </div>
 
           {/* Admin Panel (only visible to dev wallet) */}

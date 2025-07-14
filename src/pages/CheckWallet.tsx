@@ -78,7 +78,7 @@ export const CheckWallet: React.FC = () => {
             <span className="text-white">ANALYZER</span>
           </h1>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            Enter any wallet address to analyze CHOP holdings, calculate odds, and track performance. *DEMO MODE* (real Version goes live on mint)
+            Enter any wallet address to analyze CHOP holdings, calculate odds, and track performance. *DEMO MODE* (real version goes live on mint)
           </p>
         </div>
 

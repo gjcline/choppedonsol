@@ -75,7 +75,7 @@ export const CheckWallet: React.FC = () => {
           <h1 className="font-orbitron text-5xl md:text-7xl font-black mb-4">
             <span className="holographic-text">WALLET</span>
             <br />
-            <span className="text-white">ANALYZER</span>
+            <span className="text-white">ANALYZER (demo)</span>
           </h1>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
             Enter any wallet address to analyze CHOP holdings, calculate odds, and track performance.

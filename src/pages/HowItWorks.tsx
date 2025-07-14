@@ -225,17 +225,11 @@ export const HowItWorks: React.FC = () => {
           </div>
         </div>
 
-        {/* Important Disclaimer */}
-        <div className="glass-card p-6 rounded-2xl backdrop-blur-xl border border-amber-400/30 bg-amber-500/5">
-          <div className="flex items-center space-x-3 mb-4">
-            <Zap className="w-6 h-6 text-amber-400" />
-            <h3 className="text-xl font-orbitron font-bold text-amber-300">
-              Important
-            </h3>
-          </div>
-          <p className="text-gray-300 leading-relaxed">
-            This is an entertainment game, not an investment. Prizes are predetermined rewards for gameplay, not returns on investment. 
-            Play responsibly and only participate with funds you can afford to lose for entertainment purposes.
+        {/* Subtle Disclaimer */}
+        <div className="mt-12 text-center">
+          <p className="text-sm text-gray-400 max-w-2xl mx-auto">
+            CHOPPED is an entertainment experience with predetermined prizes. 
+            Play responsibly and enjoy the thrill of the game.
           </p>
         </div>
       </div>

@@ -14,6 +14,9 @@ export const Mint: React.FC = () => {
   // Get Crossmint API key from environment
   const clientApiKey = import.meta.env.VITE_CROSSMINT_CLIENT_API_KEY;
   
+  // Validate API key format
+  const isValidApiKey = clientApiKey && (clientApiKey.startsWith('ck_') || clientApiKey.startsWith('sk_'));
+  
   // Determine current price based on total minted
   const currentPrice = raffleStatus.totalMinted < EARLY_BIRD_THRESHOLD ? EARLY_BIRD_PRICE : REGULAR_PRICE;
   const totalPrice = (currentPrice * quantity).toFixed(3);
@@ -147,11 +150,11 @@ export const Mint: React.FC = () => {
               </div>
             </div>
 
-            {clientApiKey ? (
+            {isValidApiKey ? (
               <CrossmintProvider apiKey={clientApiKey}>
                 <CrossmintHostedCheckout
                   lineItems={{
-                    collectionLocator: "crossmint:8c0f06c1-0d99-4619-aeb2-88c318a7d66f",
+                    collectionLocator: `crossmint:8c0f06c1-0d99-4619-aeb2-88c318a7d66f`,
                     callData: {
                       totalPrice: totalPrice,
                       quantity: quantity,
@@ -161,15 +164,12 @@ export const Mint: React.FC = () => {
                     crypto: { enabled: true },
                     fiat: { enabled: true },
                   }}
-                  recipient={{
-                    email: "buyer@example.com", // This would be dynamic in production
-                  }}
                 />
               </CrossmintProvider>
             ) : (
-              <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-lg">
-                <p className="text-red-400 text-sm">
-                  Crossmint API key not configured. Please add VITE_CROSSMINT_CLIENT_API_KEY to your environment variables.
+              <div className="p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
+                <p className="text-yellow-400 text-sm">
+                  Crossmint integration pending. Use wallet mint for now.
                 </p>
               </div>
             )}

@@ -7,6 +7,7 @@ import { Home } from './pages/Home';
 import { CheckWallet } from './pages/CheckWallet';
 import { HowItWorks } from './pages/HowItWorks';
 import { DevMint } from './pages/DevMint';
+import { Mint } from './pages/Mint';
 
 function App() {
   return (

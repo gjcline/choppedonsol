@@ -147,24 +147,32 @@ export const Mint: React.FC = () => {
               </div>
             </div>
 
-            <CrossmintProvider apiKey={clientApiKey}>
-              <CrossmintHostedCheckout
-                lineItems={{
-                  collectionLocator: "crossmint:8c0f06c1-0d99-4619-aeb2-88c318a7d66f",
-                  callData: {
-                    totalPrice: totalPrice,
-                    quantity: quantity,
-                  },
-                }}
-                payment={{
-                  crypto: { enabled: true },
-                  fiat: { enabled: true },
-                }}
-                recipient={{
-                  email: "buyer@example.com", // This would be dynamic in production
-                }}
-              />
-            </CrossmintProvider>
+            {clientApiKey ? (
+              <CrossmintProvider apiKey={clientApiKey}>
+                <CrossmintHostedCheckout
+                  lineItems={{
+                    collectionLocator: "crossmint:8c0f06c1-0d99-4619-aeb2-88c318a7d66f",
+                    callData: {
+                      totalPrice: totalPrice,
+                      quantity: quantity,
+                    },
+                  }}
+                  payment={{
+                    crypto: { enabled: true },
+                    fiat: { enabled: true },
+                  }}
+                  recipient={{
+                    email: "buyer@example.com", // This would be dynamic in production
+                  }}
+                />
+              </CrossmintProvider>
+            ) : (
+              <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-lg">
+                <p className="text-red-400 text-sm">
+                  Crossmint API key not configured. Please add VITE_CROSSMINT_CLIENT_API_KEY to your environment variables.
+                </p>
+              </div>
+            )}
           </div>
 
           {/* Wallet Payment */}

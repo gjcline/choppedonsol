@@ -228,7 +228,7 @@ export const HowItWorks: React.FC = () => {
         {/* Subtle Disclaimer */}
         <div className="mt-12 text-center">
           <p className="text-sm text-gray-400 max-w-2xl mx-auto">
-            CHOPPED is an entertainment experience with predetermined prizes. 
+            CHOPPED is an entertainment experience with completely randomized prizes. 
             Play responsibly and enjoy the thrill of the game.
           </p>
         </div>

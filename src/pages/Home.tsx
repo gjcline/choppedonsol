@@ -90,36 +90,79 @@ export const Home: React.FC = () => {
 
           {/* Holographic Ticket */}
           <div className="relative mb-12 flex justify-center">
-            <div className="relative w-80 h-48 md:w-96 md:h-56">
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 via-blue-500/20 to-green-500/20 rounded-2xl blur-2xl"></div>
-              <div className="relative glass-card p-8 rounded-2xl backdrop-blur-xl border border-white/20 hover:border-white/40 transition-all duration-500 group">
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-400/10 via-blue-500/10 to-green-400/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                
-                {/* NFT Image */}
-                <div className="absolute left-4 top-4 bottom-4 w-32">
-                  <img 
-                    src="/chop.png" 
-                    alt="CHOP NFT" 
-                    className="w-full h-full object-cover rounded-xl opacity-80 group-hover:opacity-100 transition-opacity duration-500"
-                  />
-                </div>
-                
-                {/* Rolex Overlay */}
-                <div className="absolute top-4 right-4 opacity-30 group-hover:opacity-50 transition-opacity duration-500">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-400/30 to-yellow-600/30 flex items-center justify-center">
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center">
-                      <Gem className="w-4 h-4 text-black" />
+            <div className="flex flex-col md:flex-row gap-6 md:gap-8">
+              {/* Normal Blue Ticket */}
+              <div className="relative w-80 h-48 md:w-96 md:h-56">
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 via-cyan-500/20 to-blue-500/20 rounded-2xl blur-2xl"></div>
+                <div className="relative glass-card p-8 rounded-2xl backdrop-blur-xl border border-white/20 hover:border-white/40 transition-all duration-500 group">
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-400/10 via-cyan-500/10 to-blue-400/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  
+                  {/* NFT Image */}
+                  <div className="absolute left-4 top-4 bottom-4 w-32">
+                    <img 
+                      src="/chop.png" 
+                      alt="CHOP NFT" 
+                      className="w-full h-full object-cover rounded-xl opacity-80 group-hover:opacity-100 transition-opacity duration-500"
+                    />
+                  </div>
+                  
+                  {/* Rolex Overlay */}
+                  <div className="absolute top-4 right-4 opacity-30 group-hover:opacity-50 transition-opacity duration-500">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-400/30 to-yellow-600/30 flex items-center justify-center">
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center">
+                        <Gem className="w-4 h-4 text-black" />
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <div className="text-center ml-36">
-                  <div className="font-orbitron text-2xl font-bold mb-2 holographic-text">CHOP</div>
-                  <div className="text-sm text-gray-400 mb-4">RAFFLE TICKET</div>
-                  <div className="text-xs text-blue-400 mb-1">COMPRESSED NFT</div>
-                  <div className="text-xs text-gray-500">250,000 TOTAL SUPPLY</div>
-                  <div className="text-xs text-gray-500">ONLY 10 SURVIVE</div>
-                  <div className="text-xs text-green-400">6,250 SPECIAL EDITIONS</div>
+                  <div className="text-center ml-36">
+                    <div className="font-orbitron text-2xl font-bold mb-2 holographic-text">CHOP</div>
+                    <div className="text-sm text-gray-400 mb-4">STANDARD TICKET</div>
+                    <div className="text-xs text-blue-400 mb-1">COMPRESSED NFT</div>
+                    <div className="text-xs text-gray-500">98% OF SUPPLY</div>
+                    <div className="text-xs text-blue-400">BLUE VARIANT</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Rare Red Ticket */}
+              <div className="relative w-80 h-48 md:w-96 md:h-56">
+                <div className="absolute inset-0 bg-gradient-to-br from-red-500/20 via-orange-500/20 to-red-500/20 rounded-2xl blur-2xl"></div>
+                <div className="relative glass-card p-8 rounded-2xl backdrop-blur-xl border border-red-400/30 hover:border-red-400/50 transition-all duration-500 group">
+                  <div className="absolute inset-0 bg-gradient-to-br from-red-400/10 via-orange-500/10 to-red-400/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  
+                  {/* Rare Badge */}
+                  <div className="absolute top-2 left-2 z-10">
+                    <div className="px-2 py-1 bg-gradient-to-r from-red-500 to-orange-500 rounded-full text-xs font-bold text-white">
+                      RARE
+                    </div>
+                  </div>
+                  
+                  {/* NFT Image */}
+                  <div className="absolute left-4 top-4 bottom-4 w-32">
+                    <img 
+                      src="/optimized_chop1rare.png" 
+                      alt="CHOP Rare NFT" 
+                      className="w-full h-full object-cover rounded-xl opacity-80 group-hover:opacity-100 transition-opacity duration-500"
+                    />
+                  </div>
+                  
+                  {/* Rolex Overlay with red tint */}
+                  <div className="absolute top-4 right-4 opacity-30 group-hover:opacity-50 transition-opacity duration-500">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-red-400/30 to-red-600/30 flex items-center justify-center">
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-red-400 to-red-600 flex items-center justify-center">
+                        <Diamond className="w-4 h-4 text-white" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="text-center ml-36">
+                    <div className="font-orbitron text-2xl font-bold mb-2 text-red-400">CHOP</div>
+                    <div className="text-sm text-gray-400 mb-4">RARE TICKET</div>
+                    <div className="text-xs text-red-400 mb-1">COMPRESSED NFT</div>
+                    <div className="text-xs text-gray-500">2% OF SUPPLY</div>
+                    <div className="text-xs text-red-400">RED VARIANT</div>
+                  </div>
                 </div>
               </div>
             </div>

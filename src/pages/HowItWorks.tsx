@@ -8,58 +8,60 @@ import {
   Clock, 
   Shield, 
   Zap,
-  ArrowRight
+  ArrowRight,
+  Gamepad2,
+  Target,
+  Award,
+  Gift
 } from 'lucide-react';
 
 export const HowItWorks: React.FC = () => {
   const phases = [
     {
-      title: "Phase 1: Mint",
-      description: "Purchase your CHOP raffle tickets",
+      title: "Phase 1: Entry",
+      description: "Purchase your CHOP game tickets",
       details: [
-        "250,000 total supply",
+        "250,000 total tickets available",
+        "Each ticket enters you in the elimination game",
         "Minimum 2 tickets per transaction", 
-        "Compressed NFTs for low fees",
-        "Early Bird: 0.005 SOL (first 100k)",
-        "Regular: 0.01 SOL (remaining 150k)",
-        "cNFT creation: ~0.00015 SOL per ticket",
-        "6,250 special edition red variants"
+        "Early Bird Price: 0.005 SOL (first 100k)",
+        "Standard Price: 0.01 SOL (remaining 150k)",
+        "10% chance of special edition artwork"
       ],
       icon: <Coins className="w-8 h-8" />
     },
     {
-      title: "Phase 2: Chop Rounds",
-      description: "Systematic elimination reduces the supply",
+      title: "Phase 2: Elimination Rounds",
+      description: "15 rounds of thrilling eliminations",
       details: [
-        "Multiple elimination rounds",
-        "Transparent on-chain process",
-        "Automated smart contract execution",
-        "Compressed NFTs stored efficiently",
-        "Artwork randomly assigned (blue/red)",
-        "Real-time updates on survivors"
+        "Each round eliminates 50% of remaining tickets",
+        "Transparent on-chain randomness",
+        "Live tracking of survivors",
+        "Only ~7-8 tickets survive from 250,000",
+        "Survival rate: 0.00305% (1 in 32,768)"
       ],
       icon: <Sword className="w-8 h-8" />
     },
     {
-      title: "Phase 3: Final 10",
-      description: "Only 10 NFTs survive from 250,000",
+      title: "Phase 3: Champions",
+      description: "The ultimate survivors compete for grand prize",
       details: [
-        "Winners are automatically selected",
-        "No human intervention required",
-        "Provably fair algorithm",
-        "Immediate winner announcement"
+        "Final survivors determined by smart contract",
+        "No human intervention",
+        "Provably fair selection",
+        "Instant winner announcement"
       ],
       icon: <Trophy className="w-8 h-8" />
     },
     {
-      title: "Phase 4: Payout",
-      description: "Winners receive SOL rewards",
+      title: "Phase 4: Rewards",
+      description: "Winners receive amazing prizes",
       details: [
-        "Automatic SOL distribution",
-        "No claiming required",
-        "Instant payouts via smart contract",
-        "Winner NFTs remain as proof",
-        "Transparent prize pool allocation"
+        "Grand Prize: $75,000 luxury watch or cash",
+        "Runner-up rewards for Top 10",
+        "Lucky Loser prizes from eliminated tickets",
+        "Community giveaways throughout",
+        "All rewards distributed transparently"
       ],
       icon: <Sparkles className="w-8 h-8" />
     }
@@ -68,24 +70,33 @@ export const HowItWorks: React.FC = () => {
   const features = [
     {
       title: "Provably Fair",
-      description: "All elimination rounds use verifiable randomness",
+      description: "All eliminations use verifiable on-chain randomness",
       icon: <Shield className="w-6 h-6" />
     },
     {
-      title: "Instant Payouts",
-      description: "Winners receive SOL automatically via smart contract",
-      icon: <Zap className="w-6 h-6" />
+      title: "NFT Collectibles",
+      description: "Your tickets are tradeable NFTs with unique artwork",
+      icon: <Target className="w-6 h-6" />
     },
     {
       title: "Transparent",
-      description: "Every step is recorded on the Solana blockchain",
+      description: "Every elimination recorded on Solana blockchain",
       icon: <Users className="w-6 h-6" />
     },
     {
-      title: "Real-time Updates",
-      description: "Live tracking of eliminations and survivor count",
-      icon: <Clock className="w-6 h-6" />
+      title: "Entertainment Focus",
+      description: "Gamified experience inspired by popular elimination games",
+      icon: <Gamepad2 className="w-6 h-6" />
     }
+  ];
+
+  const prizeBreakdown = [
+    { category: "Grand Prize", amount: "$75,000", description: "Luxury watch or cash equivalent" },
+    { category: "Top 10", amount: "$5,000", description: "Total for runner-up rewards" },
+    { category: "Lucky Losers", amount: "$8,100", description: "Prizes from eliminated tickets" },
+    { category: "Community", amount: "$30,000", description: "Giveaways throughout game" },
+    { category: "Mystery Prizes", amount: "$10,000", description: "Surprise rewards" },
+    { category: "Operations", amount: "Remaining", description: "Platform development" }
   ];
 
   return (
@@ -110,8 +121,7 @@ export const HowItWorks: React.FC = () => {
             <span className="text-white">WORKS</span>
           </h1>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            CHOP is a revolutionary NFT raffle system where 250,000 tickets are systematically 
-            eliminated until only 10 winners remain. Here's how the process works:
+            CHOPPED is an innovative elimination game on Solana where 250,000 NFT tickets compete in survival rounds until champions emerge. Here's how the game works:
           </p>
         </div>
 
@@ -154,10 +164,10 @@ export const HowItWorks: React.FC = () => {
           </div>
         </div>
 
-        {/* Features */}
+        {/* Game Features */}
         <div className="mb-24">
           <h2 className="text-4xl font-orbitron font-bold text-center mb-12 holographic-text">
-            Key Features
+            Game Features
           </h2>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -179,49 +189,54 @@ export const HowItWorks: React.FC = () => {
           </div>
         </div>
 
-        {/* Prize Pool */}
-        <div className="glass-card p-8 rounded-2xl backdrop-blur-xl border border-white/20">
-          <h2 className="text-3xl font-orbitron font-bold text-center mb-8 holographic-text">
-            Prize Pool Distribution
-          </h2>
-          
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="text-4xl font-orbitron font-bold holographic-text mb-2">
-                70%
-              </div>
-              <div className="text-lg font-medium text-white mb-2">
-                Winner Rewards
+        {/* Prize Structure */}
+        <div className="mb-12">
+          <div className="glass-card p-8 rounded-2xl backdrop-blur-xl border border-white/20">
+            <h2 className="text-3xl font-orbitron font-bold text-center mb-8 holographic-text">
+              Prize Structure
+            </h2>
+            
+            <div className="text-center mb-8">
+              <div className="text-2xl font-orbitron font-bold holographic-text mb-2">
+                Total Prize Pool: $150,000
               </div>
               <div className="text-sm text-gray-400">
-                Distributed among final 10 survivors, $d3vcav3 holders,$GIVE holders and random 'lucky losers'
+                Predetermined rewards for gameplay entertainment
               </div>
             </div>
             
-            <div className="text-center">
-              <div className="text-4xl font-orbitron font-bold holographic-text mb-2">
-                20%
-              </div>
-              <div className="text-lg font-medium text-white mb-2">
-                Development
-              </div>
-              <div className="text-sm text-gray-400">
-                Platform development and maintenance
-              </div>
-            </div>
-            
-            <div className="text-center">
-              <div className="text-4xl font-orbitron font-bold holographic-text mb-2">
-                10%
-              </div>
-              <div className="text-lg font-medium text-white mb-2">
-                Operations
-              </div>
-              <div className="text-sm text-gray-400">
-                Marketing and community building
-              </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {prizeBreakdown.map((prize, index) => (
+                <div key={index} className="text-center">
+                  <div className="glass-card p-6 rounded-2xl backdrop-blur-xl border border-white/20 hover:border-white/40 transition-all duration-500">
+                    <div className="text-2xl font-orbitron font-bold holographic-text mb-2">
+                      {prize.amount}
+                    </div>
+                    <div className="text-lg font-medium text-white mb-2">
+                      {prize.category}
+                    </div>
+                    <div className="text-sm text-gray-400">
+                      {prize.description}
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
+        </div>
+
+        {/* Important Disclaimer */}
+        <div className="glass-card p-6 rounded-2xl backdrop-blur-xl border border-amber-400/30 bg-amber-500/5">
+          <div className="flex items-center space-x-3 mb-4">
+            <Zap className="w-6 h-6 text-amber-400" />
+            <h3 className="text-xl font-orbitron font-bold text-amber-300">
+              Important
+            </h3>
+          </div>
+          <p className="text-gray-300 leading-relaxed">
+            This is an entertainment game, not an investment. Prizes are predetermined rewards for gameplay, not returns on investment. 
+            Play responsibly and only participate with funds you can afford to lose for entertainment purposes.
+          </p>
         </div>
       </div>
     </div>

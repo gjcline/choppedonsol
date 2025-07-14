@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { 
   Sword, 
   Coins, 
@@ -12,7 +13,6 @@ import {
   Gem
 } from 'lucide-react';
 import { LiveStats } from '../components/LiveStats';
-import { MintSection } from '../components/MintSection';
 import { AdminPanel } from '../components/AdminPanel';
 import { useAppContext } from '../contexts/AppContext';
 
@@ -144,8 +144,19 @@ export const Home: React.FC = () => {
             )}
           </div>
 
-          {/* Mint Section */}
-          <MintSection />
+          {/* Mint Button */}
+          <div className="mb-8">
+            <Link 
+              to="/mint"
+              className="inline-block group relative px-12 py-4 rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 text-white font-orbitron font-bold text-xl transition-all duration-300 hover:from-purple-500 hover:to-blue-500 hover:scale-105"
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-400/20 to-blue-400/20 rounded-xl blur-xl group-hover:blur-2xl transition-all duration-300"></div>
+              <span className="relative flex items-center space-x-2">
+                <Zap className="w-6 h-6" />
+                <span>MINT CHOP TICKETS</span>
+              </span>
+            </Link>
+          </div>
 
           {/* Admin Panel (only visible to dev wallet) */}
           {isDevWallet && (

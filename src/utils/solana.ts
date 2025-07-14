@@ -32,6 +32,10 @@ export const RAFFLE_PDA = new PublicKey("96w4cBXMNWjQQXabu78AGYpqYMTxS7BtPSspKMx
 export const PROJECT_WALLET = new PublicKey("4WzpcDfBfY8sCvQdSoptmucfQ1uv1QndoP6zgaq3qZTb");
 export const DEV_WALLET = new PublicKey("4WzpcDfBfY8sCvQdSoptmucfQ1uv1QndoP6zgaq3qZTb");
 // Commented out compressed NFT creation - switching to Underdog Protocol
+// Candy Machine Configuration
+export const CANDY_MACHINE_ID = "3shPjsUctq2NmwLoswMidg46XX2SMFcaearGshYLtKYw";
+export const COLLECTION_MINT = "BUa9qdqo8Gwy5HdcArcCaQspi9i3jrmspaeBKsxKzyqp";
+
 // // Compressed NFT Configuration
 // export const MERKLE_TREE = new PublicKey("7xKY2rZsqzZjTZqrFDFKHQYrr3nCkDrBLj5hJKqwRGmQ");
 // export const COLLECTION_MINT = new PublicKey("9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM");

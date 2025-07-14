@@ -17,6 +17,7 @@ function App() {
           <Navigation />
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/mint" element={<Mint />} />
             <Route path="/check" element={<CheckWallet />} />
             <Route path="/how-it-works" element={<HowItWorks />} />
             <Route path="/dev-mint" element={<DevMint />} />

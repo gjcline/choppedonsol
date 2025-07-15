@@ -143,8 +143,8 @@ export const MintSection: React.FC = () => {
               <div className="text-xs text-gray-300 space-y-1">
                 <p>• Raffle Transaction: {mintResults.raffleTransaction}</p>
                 <p>• Tickets #{mintResults.startingNumber} - #{mintResults.startingNumber + mintResults.totalMinted - 1}</p>
-                <p>• Compressed NFTs Created: {mintResults.successfulNfts}/{mintResults.totalMinted}</p>
-                <p>• cNFT Creation Cost: ~{mintResults.estimatedCost?.toFixed(4) || '0.00'} SOL</p>
+                <p>• NFTs Created: {mintResults.successfulNfts}/{mintResults.totalMinted}</p>
+                <p>• Minting Method: {mintResults.type === 'candy_machine_with_fallback' ? 'Candy Machine + Fallback' : 'Standard'}</p>
                 <p>• Artwork randomly assigned by metadata API</p>
                 <p>• Standard blue or special red edition variants</p>
                 {mintResults.failedNfts > 0 && (
@@ -184,13 +184,13 @@ export const MintSection: React.FC = () => {
             <div className="flex items-center justify-center space-x-2 mb-2">
               <Zap className="w-5 h-5 text-blue-400" />
               <Layers className="w-4 h-4 text-purple-400" />
-              <span className="font-orbitron font-bold text-blue-300">Preparing Launch</span>
+              <span className="font-orbitron font-bold text-blue-300">Candy Machine Ready</span>
             </div>
             <p className="text-sm text-gray-400">
-              The CHOP raffle with compressed NFTs is being prepared for public launch. Stay tuned!
+              The CHOP elimination game with Candy Machine NFTs is ready for launch. Stay tuned!
             </p>
             <div className="text-xs text-green-400 mt-2">
-              ✨ Live metadata API ready • 6,250 special editions available • 100x cheaper than regular NFTs
+              ✨ Candy Machine configured • Live metadata API ready • Direct Solana NFT minting
             </div>
           </div>
           

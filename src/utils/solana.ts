@@ -1,6 +1,7 @@
 import { Connection, PublicKey, SystemProgram, LAMPORTS_PER_SOL, Transaction, TransactionInstruction } from '@solana/web3.js';
 import { Program, AnchorProvider, web3, BN, Idl } from '@project-serum/anchor';
 import { WalletContextState } from '@solana/wallet-adapter-react';
+import { Metaplex, walletAdapterIdentity } from '@metaplex-foundation/js';
 
 // Commented out compressed NFT imports - switching to Underdog Protocol
 // import {
@@ -33,7 +34,7 @@ export const PROJECT_WALLET = new PublicKey("4WzpcDfBfY8sCvQdSoptmucfQ1uv1QndoP6
 export const DEV_WALLET = new PublicKey("4WzpcDfBfY8sCvQdSoptmucfQ1uv1QndoP6zgaq3qZTb");
 // Commented out compressed NFT creation - switching to Underdog Protocol
 // Candy Machine Configuration
-export const CANDY_MACHINE_ID = "3shPjsUctq2NmwLoswMidg46XX2SMFcaearGshYLtKYw";
+export const CANDY_MACHINE_ID = new PublicKey("3shPjsUctq2NmwLoswMidg46XX2SMFcaearGshYLtKYw");
 export const COLLECTION_MINT = "BUa9qdqo8Gwy5HdcArcCaQspi9i3jrmspaeBKsxKzyqp";
 
 // // Compressed NFT Configuration
@@ -202,6 +203,45 @@ export async function devMint(connection: Connection, wallet: WalletContextState
 // Create real compressed NFT using Bubblegum program
 // All compressed NFT creation code removed - switching to Underdog Protocol
 
+// Mint from Candy Machine using Metaplex SDK
+export async function mintFromCandyMachine(
+  connection: Connection,
+  wallet: WalletContextState
+) {
+  if (!wallet.publicKey) throw new Error("Wallet not connected");
+  
+  const metaplex = Metaplex.make(connection)
+    .use(walletAdapterIdentity(wallet));
+  
+  try {
+    // Fetch candy machine
+    const candyMachine = await metaplex
+      .candyMachines()
+      .findByAddress({ address: CANDY_MACHINE_ID });
+    
+    // Check if can mint
+    if (candyMachine.itemsRemaining.toNumber() === 0) {
+      throw new Error("Sold out!");
+    }
+    
+    // Mint NFT
+    const { nft } = await metaplex.candyMachines().mint({
+      candyMachine,
+      collectionUpdateAuthority: candyMachine.authorityAddress,
+    });
+    
+    return {
+      success: true,
+      mint: nft.address.toString(),
+      name: nft.name,
+      uri: nft.uri
+    };
+  } catch (error) {
+    console.error("Mint failed:", error);
+    throw error;
+  }
+}
+
 // Mint tickets - simplified for Underdog Protocol integration
 export async function mintTickets(
   connection: Connection, 
@@ -241,6 +281,9 @@ export async function mintTickets(
     // Step 3: Create compressed NFTs
     onProgress?.("Creating NFTs via Underdog Protocol...", 2, amount + 3);
     
+    // Alternative: Use Candy Machine minting
+    onProgress?.("Minting NFTs from Candy Machine...", 2, amount + 3);
+    
     const nftResults = [];
     let successfulNfts = 0;
     let failedNfts = 0;
@@ -248,34 +291,53 @@ export async function mintTickets(
     for (let i = 0; i < amount; i++) {
       const ticketNumber = startingNumber + i;
       
+      // Try Candy Machine minting first, fall back to Underdog if needed
       try {
-        const nftResult = await mintNFTWithUnderdog(
-          wallet.publicKey!.toString(),
-          ticketNumber
-        );
+        const candyMachineResult = await mintFromCandyMachine(connection, wallet);
         
         nftResults.push({
           ticketNumber,
-          signature: nftResult.transactionId,
-          name: `CHOP #${ticketNumber}`,
-          type: 'underdog_success',
-          underdogId: nftResult.nftId,
-          mintAddress: nftResult.mintAddress,
+          signature: candyMachineResult.mint,
+          name: candyMachineResult.name || `CHOP #${ticketNumber}`,
+          type: 'candy_machine',
+          mintAddress: candyMachineResult.mint,
+          uri: candyMachineResult.uri
         });
         
         successfulNfts++;
-      } catch (error) {
-        console.error(`Failed to mint NFT #${ticketNumber}:`, error);
+      } catch (candyMachineError) {
+        console.warn(`Candy Machine mint failed for ticket #${ticketNumber}, trying Underdog:`, candyMachineError);
         
-        nftResults.push({
-          ticketNumber,
-          signature: null,
-          name: `CHOP #${ticketNumber}`,
-          type: 'underdog_failed',
-          error: error instanceof Error ? error.message : 'Unknown error',
-        });
-        
-        failedNfts++;
+        // Fallback to Underdog Protocol
+        try {
+          const nftResult = await mintNFTWithUnderdog(
+            wallet.publicKey!.toString(),
+            ticketNumber
+          );
+          
+          nftResults.push({
+            ticketNumber,
+            signature: nftResult.transactionId,
+            name: `CHOP #${ticketNumber}`,
+            type: 'underdog_fallback',
+            underdogId: nftResult.nftId,
+            mintAddress: nftResult.mintAddress,
+          });
+          
+          successfulNfts++;
+        } catch (error) {
+          console.error(`Failed to mint NFT #${ticketNumber} via both methods:`, error);
+          
+          nftResults.push({
+            ticketNumber,
+            signature: null,
+            name: `CHOP #${ticketNumber}`,
+            type: 'failed',
+            error: error instanceof Error ? error.message : 'Unknown error',
+          });
+          
+          failedNfts++;
+        }
       }
       
       // Small delay between mints to avoid rate limiting
@@ -284,7 +346,7 @@ export async function mintTickets(
       }
     }
     
-    onProgress?.("Raffle ticket purchase complete!", amount + 2, amount + 2);
+    onProgress?.("NFT minting complete!", amount + 2, amount + 2);
     
     return {
       raffleTransaction: tx,
@@ -292,9 +354,9 @@ export async function mintTickets(
       startingNumber,
       totalMinted: amount,
       successfulNfts,
-      failedNfts,
-      type: 'underdog_complete',
-      estimatedCost: 0, // Underdog Protocol handles NFT creation
+      failedNfts: failedNfts,
+      type: 'candy_machine_with_fallback',
+      estimatedCost: 0, // Candy Machine handles costs
     };
     
   } catch (error) {

@@ -16,6 +16,7 @@ export default defineConfig({
     global: 'globalThis',
   },
   optimizeDeps: {
+    include: ['tweetnacl'],
     exclude: [
       'lucide-react',
       'react-fast-compare',

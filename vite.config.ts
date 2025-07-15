@@ -16,7 +16,19 @@ export default defineConfig({
     global: 'globalThis',
   },
   optimizeDeps: {
-    exclude: ['lucide-react'],
+    exclude: [
+      'lucide-react',
+      'react-fast-compare',
+      'ethers',
+      'uuid',
+      'lodash',
+      '@crossmint/client-sdk-react-ui',
+      '@solana/spl-token-metadata',
+      '@dynamic-labs/embedded-wallet-solana',
+      '@coinbase/wallet-sdk',
+      '@ethersproject/signing-key',
+      '@crossmint/wallets-sdk'
+    ],
     esbuildOptions: {
       mainFields: ['exports', 'browser', 'module', 'main']
     }

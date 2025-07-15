@@ -6,6 +6,7 @@ import path from 'path';
 export default defineConfig({
   plugins: [react()],
   build: {
+    target: 'esnext',
     commonjsOptions: {
       include: [/node_modules/]
     }

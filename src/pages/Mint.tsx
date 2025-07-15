@@ -154,7 +154,7 @@ export const Mint: React.FC = () => {
               <CrossmintProvider apiKey={clientApiKey}>
                 <CrossmintHostedCheckout
                   lineItems={{
-                    collectionLocator: `crossmint:8c0f06c1-0d99-4619-aeb2-88c318a7d66f`,
+                    collectionLocator: `crossmint:17c15c26-86bb-4781-8fa8-b7dbcd4447e7`,
                     callData: {
                       totalPrice: totalPrice,
                       quantity: quantity,

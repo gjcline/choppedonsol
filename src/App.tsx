@@ -8,6 +8,7 @@ import { CheckWallet } from './pages/CheckWallet';
 import { HowItWorks } from './pages/HowItWorks';
 import { DevMint } from './pages/DevMint';
 import { Mint } from './pages/Mint';
+import { CandyMint } from './pages/CandyMint';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/mint" element={<Mint />} />
+            <Route path="/candy-mint" element={<CandyMint />} />
             <Route path="/check" element={<CheckWallet />} />
             <Route path="/how-it-works" element={<HowItWorks />} />
             <Route path="/dev-mint" element={<DevMint />} />

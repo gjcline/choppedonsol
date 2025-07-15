@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useWallet, useConnection } from '@solana/wallet-adapter-react';
+import { getConnection } from '../utils/solana';
 import { CrossmintProvider, CrossmintHostedCheckout } from '@crossmint/client-sdk-react-ui';
 import { CreditCard, Wallet, ArrowLeft, Zap, Shield, CheckCircle, Loader2, AlertCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -9,7 +10,6 @@ import { EARLY_BIRD_PRICE, REGULAR_PRICE, EARLY_BIRD_THRESHOLD, mintTickets } fr
 export const Mint: React.FC = () => {
   const { connected, publicKey } = useWallet();
   const wallet = useWallet();
-  const { connection } = useConnection();
   const { raffleStatus, refreshData } = useAppContext();
   const [quantity, setQuantity] = useState(1);
   const [isMinting, setIsMinting] = useState(false);
@@ -34,6 +34,8 @@ export const Mint: React.FC = () => {
     setMintSuccess(false);
     
     try {
+      // Use the same connection instance for consistency
+      const connection = getConnection();
       const results = await mintTickets(connection, wallet, quantity);
       console.log('Wallet mint successful:', results);
       setMintSuccess(true);

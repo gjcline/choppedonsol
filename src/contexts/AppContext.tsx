@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useWallet, useConnection } from '@solana/wallet-adapter-react';
-import { getRaffleStatus, getUserHoldings, DEV_WALLET } from '../utils/solana';
+import { getRaffleStatus, getUserHoldings, DEV_WALLET, getConnection } from '../utils/solana';
 
 interface AppState {
   raffleStatus: {
@@ -32,7 +32,6 @@ interface AppProviderProps {
 
 export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const { publicKey, connected } = useWallet();
-  const { connection } = useConnection();
   
   const [raffleStatus, setRaffleStatus] = useState({
     totalMinted: 0,
@@ -76,7 +75,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     const interval = setInterval(refreshData, 5000);
     
     return () => clearInterval(interval);
-  }, [connected, publicKey, connection]);
+  }, [connected, publicKey]);
 
   const value: AppState = {
     raffleStatus,

@@ -17,7 +17,7 @@ export default defineConfig({
   },
   optimizeDeps: {
     include: ['@project-serum/anchor', 'bn.js'],
-    exclude: ['lucide-react'],
+    exclude: ['lucide-react', '@wallet-standard/errors'],
     esbuildOptions: {
       mainFields: ['exports', 'browser', 'module', 'main']
     }

@@ -16,17 +16,7 @@ export default defineConfig({
     global: 'globalThis',
   },
   optimizeDeps: {
-    include: ['tweetnacl'],
-    exclude: [
-      'lucide-react',
-      'react-fast-compare',
-      'ethers',
-      'uuid',
-      '@solana/spl-token-metadata',
-      '@dynamic-labs/embedded-wallet-solana',
-      '@ethersproject/signing-key',
-      '@crossmint/wallets-sdk'
-    ],
+    exclude: ['lucide-react'],
     esbuildOptions: {
       mainFields: ['exports', 'browser', 'module', 'main']
     }

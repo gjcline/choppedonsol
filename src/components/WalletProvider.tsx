@@ -14,7 +14,7 @@ interface Props {
 
 export const WalletConnectionProvider: FC<Props> = ({ children }) => {
   const network = WalletAdapterNetwork.Mainnet;
-  const endpoint = useMemo(() => 'https://solana-mainnet.phantom.app/', []);
+  const endpoint = useMemo(() => clusterApiUrl(network), [network]);
   
   const wallets = useMemo(
     () => [

@@ -1,6 +1,8 @@
 import { Connection, PublicKey, SystemProgram, LAMPORTS_PER_SOL, Transaction, TransactionInstruction } from '@solana/web3.js';
 import { Program, AnchorProvider, web3, BN, Idl } from '@project-serum/anchor';
 import { WalletContextState } from '@solana/wallet-adapter-react';
+import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
+import { clusterApiUrl } from '@solana/web3.js';
 
 // Commented out compressed NFT imports - switching to Underdog Protocol
 // import {
@@ -124,7 +126,7 @@ export const getProgram = (connection: Connection, wallet: WalletContextState) =
 // Get reliable Solana RPC connection
 export function getConnection(): Connection {
   // Use the same RPC endpoint as the wallet provider for consistency
-  return new Connection('https://solana-mainnet.phantom.app/', 'confirmed');
+  return new Connection(clusterApiUrl(WalletAdapterNetwork.Mainnet), 'confirmed');
 }
 
 // Initialize raffle (dev only)

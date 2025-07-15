@@ -18,7 +18,6 @@ export default defineConfig({
   optimizeDeps: {
     include: ['tweetnacl'],
     exclude: [
-      '@coinbase/wallet-sdk',
       'lucide-react',
       'react-fast-compare',
       'ethers',
@@ -26,7 +25,6 @@ export default defineConfig({
       'lodash',
       '@solana/spl-token-metadata',
       '@dynamic-labs/embedded-wallet-solana',
-      '@coinbase/wallet-sdk',
       '@ethersproject/signing-key',
       '@crossmint/wallets-sdk'
     ],

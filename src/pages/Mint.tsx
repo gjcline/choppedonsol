@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
-import { useWallet } from '@solana/wallet-adapter-react';
+import { useWallet, useConnection } from '@solana/wallet-adapter-react';
 import { CrossmintProvider, CrossmintHostedCheckout } from '@crossmint/client-sdk-react-ui';
-import { CreditCard, Wallet, ArrowLeft, Zap, Shield, CheckCircle } from 'lucide-react';
+import { CreditCard, Wallet, ArrowLeft, Zap, Shield, CheckCircle, Loader2, AlertCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAppContext } from '../contexts/AppContext';
-import { EARLY_BIRD_PRICE, REGULAR_PRICE, EARLY_BIRD_THRESHOLD } from '../utils/solana';
+import { EARLY_BIRD_PRICE, REGULAR_PRICE, EARLY_BIRD_THRESHOLD, mintTickets } from '../utils/solana';
 
 export const Mint: React.FC = () => {
   const { connected, publicKey } = useWallet();
-  const { raffleStatus } = useAppContext();
+  const wallet = useWallet();
+  const { connection } = useConnection();
+  const { raffleStatus, refreshData } = useAppContext();
   const [quantity, setQuantity] = useState(1);
+  const [isMinting, setIsMinting] = useState(false);
+  const [mintError, setMintError] = useState<string | null>(null);
+  const [mintSuccess, setMintSuccess] = useState(false);
   
   // Get Crossmint API key from environment
   const clientApiKey = import.meta.env.VITE_CROSSMINT_CLIENT_API_KEY;
@@ -20,6 +25,26 @@ export const Mint: React.FC = () => {
   // Determine current price based on total minted
   const currentPrice = raffleStatus.totalMinted < EARLY_BIRD_THRESHOLD ? EARLY_BIRD_PRICE : REGULAR_PRICE;
   const totalPrice = (currentPrice * quantity).toFixed(3);
+  
+  const handleWalletMint = async () => {
+    if (!connected || !wallet.publicKey) return;
+    
+    setIsMinting(true);
+    setMintError(null);
+    setMintSuccess(false);
+    
+    try {
+      const results = await mintTickets(connection, wallet, quantity);
+      console.log('Wallet mint successful:', results);
+      setMintSuccess(true);
+      await refreshData();
+    } catch (error) {
+      console.error('Wallet mint failed:', error);
+      setMintError(error instanceof Error ? error.message : 'Mint failed');
+    } finally {
+      setIsMinting(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-black text-white font-inter overflow-x-hidden pt-16">
@@ -200,13 +225,46 @@ export const Mint: React.FC = () => {
             </div>
 
             {connected ? (
-              <button className="w-full group relative px-6 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 text-white font-orbitron font-bold transition-all duration-300 hover:from-purple-500 hover:to-blue-500 hover:scale-105">
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-400/20 to-blue-400/20 rounded-xl blur-xl group-hover:blur-2xl transition-all duration-300"></div>
-                <span className="relative flex items-center justify-center space-x-2">
-                  <Zap className="w-5 h-5" />
-                  <span>MINT WITH WALLET</span>
-                </span>
-              </button>
+              <div>
+                {mintError && (
+                  <div className="mb-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
+                    <div className="flex items-center space-x-2">
+                      <AlertCircle className="w-4 h-4 text-red-400" />
+                      <span className="text-sm text-red-300">{mintError}</span>
+                    </div>
+                  </div>
+                )}
+                
+                {mintSuccess && (
+                  <div className="mb-4 p-3 bg-green-500/10 border border-green-500/30 rounded-lg">
+                    <div className="flex items-center space-x-2">
+                      <CheckCircle className="w-4 h-4 text-green-400" />
+                      <span className="text-sm text-green-300">Mint successful! Your tickets have been created.</span>
+                    </div>
+                  </div>
+                )}
+                
+                <button 
+                  onClick={handleWalletMint}
+                  disabled={isMinting}
+                  className="w-full group relative px-6 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 text-white font-orbitron font-bold transition-all duration-300 hover:from-purple-500 hover:to-blue-500 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-purple-400/20 to-blue-400/20 rounded-xl blur-xl group-hover:blur-2xl transition-all duration-300"></div>
+                  <span className="relative flex items-center justify-center space-x-2">
+                    {isMinting ? (
+                      <>
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                        <span>MINTING...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Zap className="w-5 h-5" />
+                        <span>MINT WITH WALLET</span>
+                      </>
+                    )}
+                  </span>
+                </button>
+              </div>
             ) : (
               <button className="w-full px-6 py-3 bg-gradient-to-r from-gray-600 to-gray-700 rounded-xl font-orbitron font-bold text-white opacity-75 cursor-not-allowed">
                 Connect Wallet First

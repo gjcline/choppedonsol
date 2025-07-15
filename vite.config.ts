@@ -16,6 +16,7 @@ export default defineConfig({
     global: 'globalThis',
   },
   optimizeDeps: {
+    include: ['@project-serum/anchor', 'bn.js'],
     exclude: ['lucide-react'],
     esbuildOptions: {
       mainFields: ['exports', 'browser', 'module', 'main']

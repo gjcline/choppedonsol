@@ -18,6 +18,7 @@ export default defineConfig({
   optimizeDeps: {
     include: ['tweetnacl'],
     exclude: [
+      '@coinbase/wallet-sdk',
       'lucide-react',
       'react-fast-compare',
       'ethers',

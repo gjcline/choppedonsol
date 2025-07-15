@@ -23,7 +23,6 @@ export default defineConfig({
       'ethers',
       'uuid',
       'lodash',
-      '@crossmint/client-sdk-react-ui',
       '@solana/spl-token-metadata',
       '@dynamic-labs/embedded-wallet-solana',
       '@coinbase/wallet-sdk',

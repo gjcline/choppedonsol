@@ -173,7 +173,7 @@ export async function devMint(connection: Connection, wallet: WalletContextState
   try {
     // Create instruction data with discriminator and amount
     const discriminator = Buffer.from([195, 67, 168, 135, 89, 61, 7, 232]);
-    const amountBuffer = Buffer.allocUnsafe(8);
+    const amountBuffer = Buffer.alloc(8);
     amountBuffer.writeBigUInt64LE(BigInt(DEV_MINT_AMOUNT), 0);
     const instructionData = Buffer.concat([discriminator, amountBuffer]);
     

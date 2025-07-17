@@ -16,7 +16,7 @@ export default defineConfig({
     global: 'globalThis',
   },
   optimizeDeps: {
-    include: ['@project-serum/anchor', 'bn.js', 'tweetnacl', 'bs58', 'lodash.isequal'],
+    include: ['@project-serum/anchor', 'bn.js', 'tweetnacl', 'bs58', 'lodash.isequal', 'eventemitter3'],
     exclude: ['lucide-react', '@wallet-standard/errors', '@crossmint/client-sdk-react-ui'],
     esbuildOptions: {
       mainFields: ['exports', 'browser', 'module', 'main']
